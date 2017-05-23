@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html ng-app="app1">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/angular.js"></script>
+
+<script type="text/javascript">
+	angular.module('app1', []).controller('cont1',
+			[ '$scope', '$http', function($scope, $http) {
+				$scope.titulo = 'Titulo da aplicacao 7';
+				$scope.formData = {};
+				$http.get('/api/todos').success(function(data) {
+					$scope.todos = data;
+					console.log(data);
+				}).error(function(data) {
+					console.log('Error: ' + data);
+				});
+
+				$scope.deleteTodo = function(_id) {
+					$scope._id = _id;
+					var yes = confirm('Delete ? ' + _id);
+					if (yes) {
+						$http.get('/api/todos/' + _id).success(function(data) {
+							$scope.todos = data;
+							console.log(data);
+						}).error(function(data) {
+							console.log('Error: ' + data);
+						});
+
+					} else {
+						alert('Not');
+					}
+				};
+
+				$scope.createTodo = function(){
+					
+					$http.post('/api/todos').success(function(data){
+						if($scope.formData != null ){
+							$scope.todos = data;
+						}else{
+							alert('Form undefined#');
+						}
+					}).error(function(data){
+						console.log('Error'+ data);	
+					});
+				};
+				
+			} ]);
+
+	//As Mongo shell support regex, that's completely possible.
+
+	//db.users.findOne({"username" : /.*son.*/});
+	//If we want the query to be case-insensitive, we can use "i" option, like shown below:
+	//db.users.findOne({"username" : /.*son.*/i});
+</script>
+</head>
+<body ng-controller="cont1">
+	<h2>{{titulo}}</h2>
+
+	<div id="container">
+		<div ng-repeat="todo in todos">
+			<input type="checkbox" ng-click="deleteTodo(todo._id)">{{todo.text}}
+		</div>
+	</div>
+	<hr>
+	<div id="todo-form" class="row" >
+		<div class="col-sm-8 col-sm-offset-2 text-center" >
+			<form>
+				<div class="form-group">
+					<input type="text" class="form-control input-lg text-center" placeholder="My todo item" ng-model="formData.text" >
+					<button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
+				</div>
+			</form>
+		</div>
+		
+	</div>
+</body>
+</html>
