@@ -10,9 +10,10 @@
 			[ '$scope', '$http', function($scope, $http) {
 				$scope.titulo = 'Titulo da aplicacao 7';
 				$scope.formData = {};
+				
 				$http.get('/api/todos').success(function(data) {
 					$scope.todos = data;
-					console.log(data);
+					//console.log(data);
 				}).error(function(data) {
 					console.log('Error: ' + data);
 				});
@@ -23,7 +24,7 @@
 					if (yes) {
 						$http.get('/api/todos/' + _id).success(function(data) {
 							$scope.todos = data;
-							console.log(data);
+							//console.log(data);
 						}).error(function(data) {
 							console.log('Error: ' + data);
 						});
@@ -43,6 +44,16 @@
 						}
 					}).error(function(data){
 						console.log('Error'+ data);	
+					});
+				};
+				
+				$scope.buscar = function(texto){
+				alert(texto);
+					$http.get('/api/todos/'+texto).success(function(data) {
+						$scope.todos = data;
+						//console.log(data);
+					}).error(function(data) {
+						console.log('Error: ' + data);
 					});
 				};
 				
@@ -69,6 +80,7 @@
 			<form>
 				<div class="form-group">
 					<input type="text" class="form-control input-lg text-center" placeholder="My todo item" ng-model="formData.text" >
+					<button id="text1" type="submit" class="btn btn-primary btn-lg" ng-click="buscar(formData.text)">Buscar</button>
 					<button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
 				</div>
 			</form>

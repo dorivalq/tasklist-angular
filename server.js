@@ -26,13 +26,19 @@ var Todo = mongoose.model('Todo', {
 app.get('/api/todos', function(req,res){
 	//res.json('{text: Texto_1111}')
 	//Todo.find({text: {$regex: '.* um'}},function(err, todos){
+	//console.log('req.body.text: ' +req.body.text);
 	Todo.find({text: {$regex: '.*um'}},function(err, todos){
+		
 		if(err){
 			res.send(err);
 		}
+		
+		console.log('req.body.text: '+req.body.text);
+		
 		res.json(todos);
 	});
 });
+
 
 app.post('/api/todos', function(req,res){
 	//res.json('{text: Texto_1111}')
@@ -50,8 +56,10 @@ app.get('/api/todos/:todo_id', function(req,res){
 	Todo.find({_id: req.params.todo_id},function(err, todos){
 		if(err){
 			res.send(err);
+		}else{
+			res.json(todos);
 		}
-		res.json(todos);
+		
 	});
 });
 
